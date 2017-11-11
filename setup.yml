@@ -1,0 +1,4 @@
+- hosts: dockerhosts
+  roles:
+    - docker
+

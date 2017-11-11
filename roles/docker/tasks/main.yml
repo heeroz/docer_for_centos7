@@ -1,0 +1,42 @@
+- name: install_common_softwares
+  yum: name={{ item }} state=installed update_cache=yes
+  with_items:
+    - vim
+    - zip
+    - unzip
+    - man
+    - wget
+    - ntp
+    - git
+    - ant
+    - ibus-kkc
+    - vlgothic-*
+    - glibc-common
+    - man-db
+    - sysstat
+    - lsof
+    - parted
+    - iotop
+    - curl
+    - xfsprogs
+    - sudo
+    - libselinux-python
+    - net-tools
+    - yum-utils
+    - device-mapper-persistent-data
+    - lvm2
+
+- name: disable_selinux_with_command
+  shell: setenforce 0
+  when: selinux_state.stderr.find('Disabled') == False
+
+- name: stop_iptables_for_centos7
+  service: name=firewalld state=stopped enabled=no
+  
+- name: Add docker ce repository
+  copy: src=docker-ce.repo dest=/etc/yum.repos.d/
+
+- name: install_docker
+  yum: name=docker-ce state=installed update_cache=yes
+
+
